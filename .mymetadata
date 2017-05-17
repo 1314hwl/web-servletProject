@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="FirstServer"
+  id="myeclipse.1494398300973"
+  context-root="/FirstServer"
+  j2ee-spec="5.0"
+  archive="FirstServer.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
