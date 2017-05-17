@@ -10,29 +10,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import cn.com.inzy.dao.UserDAOProxy;
 import cn.com.inzy.vo.User;
 
-/**
- * @Description @WebServlet("/LoginServlet2")这种写法无需在web.xml中注册Servlet
- * @author HuWeiLiang
- * @date 2017年5月17日 上午10:02:21
- */
-@WebServlet("/LoginServlet2")
-public class LoginServlet2 extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+@WebServlet("/LoginServlet3")
+public class HibernateServlet extends HttpServlet {
 
-    public LoginServlet2() {
+    public HibernateServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,14 +47,25 @@ public class LoginServlet2 extends HttpServlet {
             System.out.println("密码不能为空");
         }
         if (info.size() == 0) {
-            User user = new User();
-            user.setName(name);
-            user.setPassword(password);
-            UserDAOProxy userDAOProxy = new UserDAOProxy();
+            // User user = new User();
+            // user.setName(name);
+            // user.setPassword(password);
+            // UserDAOProxy userDAOProxy = new UserDAOProxy();
             try {
-
-                if (userDAOProxy.findLogin(user)) {
-                    System.out.println("登录成功");
+                Configuration cfg = new Configuration();
+                // cfg.configure("cn.com.inzy.hiber/hibernate.cfg.xml");
+                SessionFactory sf = cfg.configure().buildSessionFactory();
+                Session session = sf.openSession();
+                // session.beginTransaction();
+                // session.save(s);
+                // session.getTransaction().commit();
+                String queryStr = "from User where name = '" + name + "' and password = '" + password + "'";
+                Query query = session.createQuery(queryStr);
+                User user = (User) query.list().get(0);
+                session.close();
+                sf.close();
+                if (user != null) {
+                    System.out.println("登录成功" + "user:" + user.toString());
                     info.add("用户登录成功，欢迎" + user.getName() + "光临！");
                 } else {
                     info.add("用户登录失败，错误的用户名和密码");
@@ -66,6 +73,7 @@ public class LoginServlet2 extends HttpServlet {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("登录失败" + e.toString());
             }
         }
         request.setAttribute("info", info);// 保存错误信息

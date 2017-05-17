@@ -8,6 +8,7 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 
+	<!-- 注册一个servlet -->
 	<servlet>
 		<servlet-name>first</servlet-name>
 		<servlet-class>cn.com.inzy.sevlet.LoginServlet</servlet-class>
