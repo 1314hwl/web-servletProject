@@ -12,6 +12,17 @@ public class User {
 
     private String password;// 对应数据库中password
 
+    public User() {
+
+    }
+
+    public User(int id, String name, String password) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.password = password;
+    }
+
     public int getId() {
         return id;
     }
